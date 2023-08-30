@@ -1,5 +1,7 @@
 temp/script_temp.py
 temp/
+__pycache__/
 *.lib
 *.metagen
 *.pdb
+*.bat
