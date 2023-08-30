@@ -1,0 +1,5 @@
+temp/script_temp.py
+temp/
+*.lib
+*.metagen
+*.pdb
