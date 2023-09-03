@@ -1,7 +1,6 @@
-import subprocess
+# import subprocess
 import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk
+from tkinter import ttk, filedialog
 
 ################ChildFunction######################
 
@@ -63,40 +62,40 @@ def add_string(messagelabel, *args):
     print(result_string)
     # subprocess.Popen('start cmd', shell=True)
 
-def help_function(messagelabel, window):
+def document_function(messagelabel, window):
     messagelabel.config(text="Show command syntax usage")
-    helpwindow = tk.Toplevel(window)
-    helpwindow.title("Usage")
-    help_label = tk.Label(helpwindow, text='''
+    documentwindow = tk.Toplevel(window)
+    documentwindow.title("Usage")
+    documentwindow.iconbitmap(".\\icon\\document_icon.ico")
+    documentwindow.geometry("600x400")
+    document_label = tk.Label(documentwindow, text='''
     lightbeam decode [OPTION...] Images folder
     -h, --help Print usage
     -c, --config arg Configuration file (.vlc)
     -r, --results arg Results output file
     -t, --templates arg Hog templates file
-    -l, --log_file arg Enable logging and save messages on target
-    file
+    -l, --log_file arg Enable logging and save messages on target file
     --log_level arg Set the log level (default: 0)
     -m, --memory arg Heap memory (KB) (default: 10000)
     --stack arg Stack memory (KB) (default: 11000)
     -i, --iterations arg Profiling iterations (default: 1)
     --disable-shortcuts Disable performance shortcuts
     --threads arg Total number of threads used internally in the VL6
-    --stop_after_labels arg Maximum number of labels present in the
-    image, if reached decoding is stopped
-    --progressive_slice_height arg
-    Progressive decoding mode image slices
-    height (default: 256)
+    --stop_after_labels arg Maximum number of labels present in the image, if reached decoding is stopped
+    --progressive_slice_height arg Progressive decoding mode image slices height (default: 256)
     --decode_timeout arg Decode timeout (ms)(default: -1 that means disabled)
     --mip Set the number of intances that run the progressive modee
     --repeat Number of times each image is decoded. Useful to spot memory leaks
     -v, --verbose Verbose display (optional)
-    ''')
-    help_label.pack()
+    ''', anchor="w", justify="left")
+    document_label.pack()
 
 def about_function(messagelabel, window):
     messagelabel.config(text="Show test tool information")
     aboutwindow = tk.Toplevel(window)
     aboutwindow.title("About")
+    aboutwindow.iconbitmap(".\\icon\\about_icon.ico")
+    aboutwindow.geometry("300x30")
     about_label = tk.Label(aboutwindow, text="LightBeam test tool v.1.0.1")
     about_label.pack()
     
