@@ -49,6 +49,10 @@ for %%f in (%CSV_FILES%) do (
     with open('ExBatch.bat', 'w') as file:
         file.write(batch_content)
 
+def create_single_cmd(lightbeam, configfile, resultfolder, imagefolder):
+    single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -v -r " + resultfolder + " " + imagefolder
+    print(single_cmd)
+
 def add_string(*args):
     result_string = ''.join(args)
     print(result_string)

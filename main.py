@@ -135,4 +135,7 @@ create_batch_button.grid(row=20, column=0)
 add_button = tk.Button(root, text="Add", command=lambda: add_string(log_inputbox.get(), loglevel_combobox.get(), heap_memory_combobox.get(), stack_memory_combobox.get(), iteration_combobox.get(), threads_number_combobox.get(), stop_after_combobox.get(), progressive_slice_height_combobox.get(), decode_timeout_combobox.get(), progressive_instances_number_combobox.get(), repeat_combobox.get()))
 add_button.grid(row=21, column=0)
 
+create_cmd_button = tk.Button(root, text="Create CMD", command=lambda: create_single_cmd(lightbeam_label.cget("text").split("/")[-1], "configfile", "resultfolder", "imagefolder"))
+create_cmd_button.grid(row=22, column=0)
+
 root.mainloop()
