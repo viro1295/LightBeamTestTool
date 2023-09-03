@@ -64,6 +64,7 @@ heap_memory_combobox = ttk.Combobox(root, values=["10000","100000", "200000", "O
 heap_memory_combobox.set("10000")
 heap_memory_combobox.bind("<<ComboboxSelected>>", lambda event: setstate_combobox(event, heap_memory_combobox))
 heap_memory_combobox.grid(row=8, column=1)
+
 stack_memory_label = tk.Label(root, text="Stack Memory (Default: 11000)")
 stack_memory_label.grid(row=9, column=0)
 stack_memory_combobox = ttk.Combobox(root, values=["11000","20000", "50000", "Other"])
@@ -131,7 +132,7 @@ verbose_button.grid(row=18, column=0)
 create_batch_button = tk.Button(root, text="Create Batchfile", command=create_batch_file("C11", "C22", "C33"))
 create_batch_button.grid(row=20, column=0)
 
-add_button = tk.Button(root, text="Add", command=lambda: add_string(heap_memory_combobox.get(), stack_memory_combobox.get(), lightbeam_label.cget("text"), loglevel_combobox.get()))
+add_button = tk.Button(root, text="Add", command=lambda: add_string(log_inputbox.get(), loglevel_combobox.get(), heap_memory_combobox.get(), stack_memory_combobox.get(), iteration_combobox.get(), threads_number_combobox.get(), stop_after_combobox.get(), progressive_slice_height_combobox.get(), decode_timeout_combobox.get(), progressive_instances_number_combobox.get(), repeat_combobox.get()))
 add_button.grid(row=21, column=0)
 
 root.mainloop()
