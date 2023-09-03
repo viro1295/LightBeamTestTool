@@ -45,18 +45,26 @@ toolbar.pack(side=tk.TOP, fill=tk.X)
 
 lightbeam_button_photo = ImageTk.PhotoImage(Image.open(".\\icon\\lightbeam_file_icon.jpg"))
 lightbeam_button = tk.Button(toolbar, image=lightbeam_button_photo, text="LightBeam", command=lambda: choosefile_insertwidget(message_label, lightbeam, "Choose LightBeam version", lightbeam_label))
+lightbeam_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, lightbeam_button, "LightBeam"))
+lightbeam_button.bind("<Leave>",lambda event: hide_tooltip(event, lightbeam_button))
 lightbeam_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 configure_button_photo = ImageTk.PhotoImage(Image.open(".\\icon\\configfile_icon.jpg"))
 configure_button = tk.Button(toolbar, image=configure_button_photo, text="ConfigureFile", command=lambda: choosefile_insertwidget(message_label, configure, "Choose configure file", configure_label))
+configure_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, configure_button, "ConfigureFile"))
+configure_button.bind("<Leave>",lambda event: hide_tooltip(event, configure_button))
 configure_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 imagefolder_photo = ImageTk.PhotoImage(Image.open(".\\icon\\imagefolder_icon.jpg"))
 image_button = tk.Button(toolbar, image=imagefolder_photo, text="ImageFolder", command=lambda: choosefile_insertwidget(message_label, image, "Choose image folder", image_label))
+image_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, image_button, "ImageFolder"))
+image_button.bind("<Leave>",lambda event: hide_tooltip(event, image_button))
 image_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 hogfile_photo = ImageTk.PhotoImage(Image.open(".\\icon\\hogfile_icon.jpg"))
 hog_button = tk.Button(toolbar, image=hogfile_photo, text="HogFile", command=lambda: choosefile_insertwidget(message_label, hog_file, "Choose Hog file", hog_label))
+hog_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, hog_button, "HogFile"))
+hog_button.bind("<Leave>",lambda event: hide_tooltip(event, hog_button))
 hog_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 ###################ConfigInfoFrame###################

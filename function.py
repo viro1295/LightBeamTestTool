@@ -99,6 +99,16 @@ def about_function(messagelabel, window):
     about_label = tk.Label(aboutwindow, text="LightBeam test tool v.1.0.1")
     about_label.pack()
     
+def show_tooltip(event, window, button, content):
+    button.tooltip = tk.Toplevel(window)
+    button.tooltip.wm_overrideredirect(True)
+    button.tooltip.wm_geometry(f"+{event.x_root+10}+{event.y_root+10}")
+    
+    label = ttk.Label(button.tooltip, text=content, background="yellow")
+    label.pack()
+
+def hide_tooltip(event, button):
+    button.tooltip.destroy()
 
 ##################EndChildFunction####################
 
