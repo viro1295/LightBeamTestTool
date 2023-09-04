@@ -41,31 +41,6 @@ def select_unselect(messagelabel, tick, tickinfo, untickinfo):
         messagelabel.config(text="Unchecked parameter")
         print(untickinfo)
 
-def create_batch_file(messagelabel, StringA, StringB, StringC):
-    batch_content = '''@echo off
-setlocal enabledelayedexpansion
-set CSV_FILES=%1*.csv
-for %%f in (%CSV_FILES%) do (
-  for /f "tokens=1,2,3 delims=," %%a in (%%f) do (
-    mkdir %%b
-    rmdir /s /q %%b
-    .\\Lightbeam.exe {} -c %%a -v -r %%b -l %%b.json {} {} %%c > %%b.txt
-  )
-)'''.format(StringA, StringB, StringC)
-    with open('ExBatch.bat', 'w') as file:
-        file.write(batch_content)
-    messagelabel.config(text="Created ExBatch.bat file in current folder")
-
-def create_single_cmd(lightbeam, configfile, resultfolder, imagefolder):
-    single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -v -r " + resultfolder + " " + imagefolder
-    print(single_cmd)
-
-def add_string(messagelabel, *args):
-    result_string = ''.join(args)
-    messagelabel.config(text="Added to result string")
-    print(result_string)
-    # subprocess.Popen('start cmd', shell=True)
-
 def document_function(messagelabel, window):
     messagelabel.config(text="Show command syntax usage")
     documentwindow = tk.Toplevel(window)
@@ -113,6 +88,40 @@ def show_tooltip(event, window, button, content):
 
 def hide_tooltip(event, button):
     button.tooltip.destroy()
+
+def create_batch_file(messagelabel, StringA, StringB, StringC):
+    batch_content = '''@echo off
+setlocal enabledelayedexpansion
+set CSV_FILES=%1*.csv
+for %%f in (%CSV_FILES%) do (
+  for /f "tokens=1,2,3 delims=," %%a in (%%f) do (
+    mkdir %%b
+    rmdir /s /q %%b
+    .\\Lightbeam.exe {} -c %%a -v -r %%b -l %%b.json {} {} %%c > %%b.txt
+  )
+)'''.format(StringA, StringB, StringC)
+    with open('ExBatch.bat', 'w') as file:
+        file.write(batch_content)
+    messagelabel.config(text="Created ExBatch.bat file in current folder")
+
+def create_single_cmd(lightbeam, configfile, resultfolder, imagefolder):
+    single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -v -r " + resultfolder + " " + imagefolder
+    print(single_cmd)
+
+def add_string(messagelabel, *args):
+    result_string = ''.join(args)
+    messagelabel.config(text="Added to result string")
+    print(result_string)
+    # subprocess.Popen('start cmd', shell=True)
+
+def check_addtoCMD(messagelabel, tick, param_name, param_value):
+    if tick.get() == 1:
+        param_str = param_name + param_value 
+        messagelabel.config(text="Added parameter to CMD")   
+    else:
+        param_str = ""
+        messagelabel.config(text="Removed parameter from CMD")
+    print(param_str)
 
 ##################EndChildFunction####################
 

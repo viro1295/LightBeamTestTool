@@ -11,6 +11,7 @@ hog_file = ""
 log_file = ""
 message = "This is message box!"
 
+
 ###GUI###
 root = tk.Tk()
 root.title("LightBeam test tool")
@@ -103,6 +104,9 @@ log_inputbox = tk.Entry(parameterframe, state=tk.DISABLED)
 log_inputbox.grid(row=0, column=1, sticky='w')
 log_browsebutton = tk.Button(parameterframe, text="Browse", state=tk.DISABLED, command=lambda: choosefile_insertwidget(message_label, log_file, "Choose Log file", log_inputbox))
 log_browsebutton.grid(row=0, column=2, sticky='w')
+log_addCMD_tick = tk.BooleanVar()
+log_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add to CMD", variable=log_addCMD_tick, command=lambda: check_addtoCMD(message_label, log_addCMD_tick, "-l ", log_inputbox.get()))
+log_addCMD_checkbutton.grid(row=0, column=3, sticky='w')
 
 loglevel_label = tk.Label(parameterframe, text="Log Level (Default: 0)")
 loglevel_label.grid(row=1, column=0, sticky='e')
@@ -110,6 +114,9 @@ loglevel_combobox = ttk.Combobox(parameterframe, values=["0", "1", "2", "3"])
 loglevel_combobox.set("0")
 loglevel_combobox.bind("<<ComboboxSelected>>", lambda event: setstate_combobox(message_label, event, loglevel_combobox))
 loglevel_combobox.grid(row=1, column=1, sticky='w')
+loglevel_addCMD_tick = tk.BooleanVar()
+loglevel_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add to CMD", variable=loglevel_addCMD_tick, command=lambda: check_addtoCMD(message_label, loglevel_addCMD_tick, "--log_level ", loglevel_combobox.get()))
+loglevel_addCMD_checkbutton.grid(row=1, column=3, sticky='w')
 
 heap_memory_label = tk.Label(parameterframe, text="Heap Memory (Default: 10000)")
 heap_memory_label.grid(row=2, column=0, sticky='e')
@@ -117,6 +124,9 @@ heap_memory_combobox = ttk.Combobox(parameterframe, values=["10000","100000", "2
 heap_memory_combobox.set("10000")
 heap_memory_combobox.bind("<<ComboboxSelected>>", lambda event: setstate_combobox(message_label, event, heap_memory_combobox))
 heap_memory_combobox.grid(row=2, column=1, sticky='w')
+heap_memory_addCMD_tick = tk.BooleanVar()
+heap_memory_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add to CMD", variable=heap_memory_addCMD_tick, command=lambda: check_addtoCMD(message_label, heap_memory_addCMD_tick, "-m ", heap_memory_combobox.get()))
+heap_memory_addCMD_checkbutton.grid(row=2, column=3, sticky='w')
 
 stack_memory_label = tk.Label(parameterframe, text="Stack Memory (Default: 11000)")
 stack_memory_label.grid(row=3, column=0, sticky='e')
