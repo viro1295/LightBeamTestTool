@@ -28,7 +28,8 @@ menubar.add_cascade(label="File", menu=file_menu)
 
 run_menu = tk.Menu(menubar, tearoff=0)
 run_menu.add_command(label="Create BatchFile", command=lambda: create_batch_file(message_label, "C11", "C22", "C33"))
-run_menu.add_command(label="Add", command=lambda: add_string(message_label, heap_memory_combobox.get(), stack_memory_combobox.get(), lightbeam_label.cget("text"), loglevel_combobox.get()))
+run_menu.add_command(label="Create Single CMD", command=lambda: create_single_cmd(lightbeam_label.cget("text").split("/")[-1], "configfile", "resultfolder", "imagefolder"))
+run_menu.add_command(label="Add String", command=lambda: add_string(log_inputbox.get(), loglevel_combobox.get(), heap_memory_combobox.get(), stack_memory_combobox.get(), iteration_combobox.get(), threads_number_combobox.get(), stop_after_combobox.get(), progressive_slice_height_combobox.get(), decode_timeout_combobox.get(), progressive_instances_number_combobox.get(), repeat_combobox.get()))
 menubar.add_cascade(label="Run", menu=run_menu)
 
 help_menu = tk.Menu(menubar, tearoff=0)
@@ -184,8 +185,8 @@ verbose_button.grid(row=12, column=0, sticky='e')
 #######################MessageFrame#########################
 messageframe = tk.Frame(root, borderwidth=0.5, relief="sunken", bg="#CCCCCC")
 messageframe.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
-
 message_label = tk.Label(messageframe, text=message, bg="#CCCCCC")
 message_label.pack()
+
 
 root.mainloop()

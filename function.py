@@ -56,6 +56,10 @@ for %%f in (%CSV_FILES%) do (
         file.write(batch_content)
     messagelabel.config(text="Created ExBatch.bat file in current folder")
 
+def create_single_cmd(lightbeam, configfile, resultfolder, imagefolder):
+    single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -v -r " + resultfolder + " " + imagefolder
+    print(single_cmd)
+
 def add_string(messagelabel, *args):
     result_string = ''.join(args)
     messagelabel.config(text="Added to result string")
