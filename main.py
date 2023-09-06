@@ -11,7 +11,6 @@ hog_file = ""
 log_file = ""
 message = "This is message box!"
 
-
 ###GUI###
 root = tk.Tk()
 root.title("LightBeam test tool")
@@ -29,8 +28,7 @@ menubar.add_cascade(label="File", menu=file_menu)
 
 run_menu = tk.Menu(menubar, tearoff=0)
 run_menu.add_command(label="Create BatchFile", command=lambda: create_batch_file(message_label, "C11", "C22", "C33"))
-run_menu.add_command(label="Create Single CMD", command=lambda: create_single_cmd(lightbeam_label.cget("text").split("/")[-1], "configfile", "resultfolder", "imagefolder"))
-run_menu.add_command(label="Add String", command=lambda: add_string(log_inputbox.get(), loglevel_combobox.get(), heap_memory_combobox.get(), stack_memory_combobox.get(), iteration_combobox.get(), threads_number_combobox.get(), stop_after_combobox.get(), progressive_slice_height_combobox.get(), decode_timeout_combobox.get(), progressive_instances_number_combobox.get(), repeat_combobox.get()))
+run_menu.add_command(label="Create Single CMD", command=lambda: create_single_cmd(message_label, lightbeam_label.cget("text").split("/")[-1], configure_label.cget("text"), "resultfolder", image_label.cget("text"), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
 menubar.add_cascade(label="Run", menu=run_menu)
 
 help_menu = tk.Menu(menubar, tearoff=0)
@@ -43,7 +41,6 @@ root.config(menu=menubar)
 ###################ToolBar###################
 toolbar = tk.Frame(root)
 toolbar.pack(side=tk.TOP, fill=tk.X)
-
 
 lightbeam_button_photo = ImageTk.PhotoImage(Image.open(".\\icon\\lightbeam_file_icon.jpg"))
 lightbeam_button = tk.Button(toolbar, image=lightbeam_button_photo, text="LightBeam", command=lambda: choosefile_insertwidget(message_label, lightbeam, "Choose LightBeam version", lightbeam_label))
@@ -227,6 +224,5 @@ messageframe = tk.Frame(root, borderwidth=0.5, relief="sunken", bg="#CCCCCC")
 messageframe.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 message_label = tk.Label(messageframe, text=message, bg="#CCCCCC")
 message_label.pack()
-
 
 root.mainloop()
