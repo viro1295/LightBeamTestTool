@@ -118,19 +118,19 @@ def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefo
     messagelabel.config(text=notify)
 
     if lightbeam and configfile and resultfolder and imagefolder:
-        log_str = " -l " + log if log_tick else ""
-        loglevel_str = " --log_level " + loglevel if loglevel_tick else ""
-        heap_memory_str = " -m " + heap_memory if heap_memory_tick else ""
-        stack_memory_str = " --stack " + stack_memory if stack_memory_tick else ""
-        iteration_str = " -i " + iteration if iteration_tick else ""
-        disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick else ""
-        threads_number_str = " --threads " + threads_number if threads_number_tick else ""
-        stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick else ""
-        slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick else ""
-        decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick else ""
-        instances_number_str = " --mip " + instances_number if instances_number_tick else ""
-        repeat_str = " --repeat " + repeat if repeat_tick else ""
-        verbose_str = " -v" if verbose_tick else ""
+        log_str = " -l " + log if log_tick.get() == 1 else ""
+        loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
+        heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
+        stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
+        iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
+        disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
+        threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
+        stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
+        slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
+        decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
+        instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
+        repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
+        verbose_str = " -v" if verbose_tick.get() == 1 else ""
 
         single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -r " + resultfolder + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str + " " + imagefolder
         print(single_cmd)
