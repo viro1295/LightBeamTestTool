@@ -18,7 +18,7 @@ def choosefolder_insertwidget(messagelabel, folderpath, dialogname, widget):
     messagelabel.config(text="Choose folder from computer")
     folderpath = filedialog.askdirectory(title=dialogname)
     widget.config(text=folderpath)
-    
+
 def setstate_combobox(messagelabel, event, combobox):
     messagelabel.config(text="Set value for parameter")
     if combobox.get() == "Other":
@@ -94,20 +94,39 @@ def show_tooltip(event, window, button, content):
 def hide_tooltip(event, button):
     button.tooltip.destroy()
 
-def create_batch_file(messagelabel, lightbeam, StringB, StringC):
-    batch_content = '''@echo off
+def create_batch_file(messagelabel, lightbeam, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+    if not lightbeam:
+        messagelabel.config(text="Please choose LightBeam file!")
+    else:
+        log_str = " -l " + log if log_tick.get() == 1 else ""
+        loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
+        heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
+        stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
+        iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
+        disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
+        threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
+        stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
+        slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
+        decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
+        instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
+        repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
+        verbose_str = " -v" if verbose_tick.get() == 1 else ""
+
+        sub_param_str = log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
+
+        batch_content = '''@echo off
 setlocal enabledelayedexpansion
 set CSV_FILES=%1*.csv
 for %%f in (%CSV_FILES%) do (
   for /f "tokens=1,2,3 delims=," %%a in (%%f) do (
     mkdir %%b
     rmdir /s /q %%b
-    .\\{} decode -c %%a -r %%b %%c > %%b.txt
+    .\\{} decode -c %%a -r %%b{} %%c > %%b.txt
   )
-)'''.format(lightbeam, StringB, StringC)
-    with open('ExBatch.bat', 'w') as file:
-        file.write(batch_content)
-    messagelabel.config(text="Created ExBatch.bat file in current folder")
+)'''.format(lightbeam, sub_param_str)
+        with open('ExBatch.bat', 'w') as file:
+            file.write(batch_content)
+        messagelabel.config(text="Created ExBatch.bat file in current folder")
      
 
 def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
