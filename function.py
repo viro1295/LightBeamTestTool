@@ -14,6 +14,11 @@ def choosefile_insertwidget(messagelabel, filepath, dialogname, widget):
         widget.delete(0, tk.END)
         widget.insert(0, filepath)
 
+def choosefolder_insertwidget(messagelabel, folderpath, dialogname, widget):
+    messagelabel.config(text="Choose folder from computer")
+    folderpath = filedialog.askdirectory(title=dialogname)
+    widget.config(text=folderpath)
+    
 def setstate_combobox(messagelabel, event, combobox):
     messagelabel.config(text="Set value for parameter")
     if combobox.get() == "Other":

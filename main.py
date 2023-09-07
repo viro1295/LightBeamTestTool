@@ -6,7 +6,8 @@ from function import *
 
 lightbeam = ""
 configure = ""
-image = ""
+resultfolder = ""
+imagefolder = ""
 hogfile = ""
 log_file = ""
 message = "This is message box!"
@@ -28,7 +29,7 @@ menubar.add_cascade(label="File", menu=file_menu)
 
 run_menu = tk.Menu(menubar, tearoff=0)
 run_menu.add_command(label="Create BatchFile", command=lambda: create_batch_file(message_label, "C11", "C22", "C33"))
-run_menu.add_command(label="Create Single CMD", command=lambda: create_single_cmd(message_label, lightbeam_label.cget("text").split("/")[-1], configure_label.cget("text"), "resultfolder", image_label.cget("text"), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
+run_menu.add_command(label="Create Single CMD", command=lambda: create_single_cmd(message_label, lightbeam_label.cget("text").split("/")[-1], configure_label.cget("text"), "resultfolder", imagefolder_label.cget("text"), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
 menubar.add_cascade(label="Run", menu=run_menu)
 
 help_menu = tk.Menu(menubar, tearoff=0)
@@ -54,11 +55,17 @@ configure_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, confi
 configure_button.bind("<Leave>",lambda event: hide_tooltip(event, configure_button))
 configure_button.pack(side=tk.LEFT, padx=2, pady=2)
 
+resultfolder_photo = ImageTk.PhotoImage(Image.open(".\\icon\\resultfolder_icon.jpg"))
+resultfolder_button = tk.Button(toolbar, image=resultfolder_photo, text="ResultFolder", command=lambda: choosefolder_insertwidget(message_label, resultfolder, "Choose result folder", resultfolder_label))
+resultfolder_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, resultfolder_button, "ResultFolder"))
+resultfolder_button.bind("<Leave>",lambda event: hide_tooltip(event, resultfolder_button))
+resultfolder_button.pack(side=tk.LEFT, padx=2, pady=2)
+
 imagefolder_photo = ImageTk.PhotoImage(Image.open(".\\icon\\imagefolder_icon.jpg"))
-image_button = tk.Button(toolbar, image=imagefolder_photo, text="ImageFolder", command=lambda: choosefile_insertwidget(message_label, image, "Choose image folder", image_label))
-image_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, image_button, "ImageFolder"))
-image_button.bind("<Leave>",lambda event: hide_tooltip(event, image_button))
-image_button.pack(side=tk.LEFT, padx=2, pady=2)
+imagefolder_button = tk.Button(toolbar, image=imagefolder_photo, text="ImageFolder", command=lambda: choosefolder_insertwidget(message_label, imagefolder, "Choose image folder", imagefolder_label))
+imagefolder_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, imagefolder_button, "ImageFolder"))
+imagefolder_button.bind("<Leave>",lambda event: hide_tooltip(event, imagefolder_button))
+imagefolder_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 ###################ConfigInfoFrame###################
 configframe = tk.Frame(root, borderwidth=0.5, relief="solid")
@@ -74,10 +81,15 @@ title_configure_label.grid(row=1, column=0, sticky='e')
 configure_label = tk.Label(configframe, text=configure)
 configure_label.grid(row=1, column=1, sticky='w')
 
-title_image_label = tk.Label(configframe, text="ImageFolder: ")
-title_image_label.grid(row=2, column=0, sticky='e')
-image_label = tk.Label(configframe, text=image)
-image_label.grid(row=2, column=1, sticky='w')
+title_resultfolder_label = tk.Label(configframe, text="ResultFolder: ")
+title_resultfolder_label.grid(row=2, column=0, sticky='e')
+resultfolder_label = tk.Label(configframe, text=resultfolder)
+resultfolder_label.grid(row=2, column=1, sticky='w')
+
+title_imagefolder_label = tk.Label(configframe, text="ImageFolder: ")
+title_imagefolder_label.grid(row=3, column=0, sticky='e')
+imagefolder_label = tk.Label(configframe, text=imagefolder)
+imagefolder_label.grid(row=3, column=1, sticky='w')
 
 ###################ParameterFrame###################
 parameterframe = tk.Frame(root)
