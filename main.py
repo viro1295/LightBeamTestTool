@@ -73,22 +73,22 @@ configframe.pack(side=tk.TOP, fill=tk.X)
 
 title_lightbeam_label = tk.Label(configframe, text="LightBeam: ")
 title_lightbeam_label.grid(row=0, column=0, sticky='e')
-lightbeam_label = tk.Label(configframe, text=lightbeam)
+lightbeam_label = tk.Label(configframe, text=lightbeam, fg="blue")
 lightbeam_label.grid(row=0, column=1, sticky='w')
 
 title_configure_label = tk.Label(configframe, text="ConfigureFile: ")
 title_configure_label.grid(row=1, column=0, sticky='e')
-configure_label = tk.Label(configframe, text=configure)
+configure_label = tk.Label(configframe, text=configure, fg="blue")
 configure_label.grid(row=1, column=1, sticky='w')
 
 title_resultfolder_label = tk.Label(configframe, text="ResultFolder: ")
 title_resultfolder_label.grid(row=2, column=0, sticky='e')
-resultfolder_label = tk.Label(configframe, text=resultfolder)
+resultfolder_label = tk.Label(configframe, text=resultfolder, fg="blue")
 resultfolder_label.grid(row=2, column=1, sticky='w')
 
 title_imagefolder_label = tk.Label(configframe, text="ImageFolder: ")
 title_imagefolder_label.grid(row=3, column=0, sticky='e')
-imagefolder_label = tk.Label(configframe, text=imagefolder)
+imagefolder_label = tk.Label(configframe, text=imagefolder, fg="blue")
 imagefolder_label.grid(row=3, column=1, sticky='w')
 
 ###################ParameterFrame###################

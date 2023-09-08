@@ -24,8 +24,15 @@ def setstate_combobox(messagelabel, event, combobox):
     if combobox.get() == "Other":
         combobox.set("")
         combobox.config(state="normal")
+        combobox.configure(foreground="red")
     else:
         combobox.config(state="readonly")
+        combobox.configure(foreground="black")
+
+    # if combobox.get() != "0":
+    #     combobox.configure(foreground="red")
+    # else:
+    #     combobox.configure(foreground="black")
         
 def toggle_widgetstate(messagelabel, tick, *widgets):
     if tick.get() == 1:
