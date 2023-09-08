@@ -94,10 +94,11 @@ def show_tooltip(event, window, button, content):
 def hide_tooltip(event, button):
     button.tooltip.destroy()
 
-def create_batch_file(messagelabel, lightbeam, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+def create_batch_file(messagelabel, lightbeam, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
     if not lightbeam:
         messagelabel.config(text="Please choose LightBeam file!")
     else:
+        hog_str = " -t " + hog if hog_tick.get() == 1 else ""
         log_str = " -l " + log if log_tick.get() == 1 else ""
         loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
         heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
@@ -111,8 +112,7 @@ def create_batch_file(messagelabel, lightbeam, log_tick, log, loglevel_tick, log
         instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
         repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
         verbose_str = " -v" if verbose_tick.get() == 1 else ""
-
-        sub_param_str = log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
+        sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
 
         batch_content = '''@echo off
 setlocal enabledelayedexpansion
@@ -129,7 +129,7 @@ for %%f in (%CSV_FILES%) do (
         messagelabel.config(text="Created ExBatch.bat file in current folder")
      
 
-def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
     notify = ""
     if not lightbeam:
         notify += "Please choose LightBeam file!\n"
@@ -142,6 +142,7 @@ def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefo
     messagelabel.config(text=notify)
 
     if lightbeam and configfile and resultfolder and imagefolder:
+        hog_str = " -t " + hog if hog_tick.get() == 1 else ""
         log_str = " -l " + log if log_tick.get() == 1 else ""
         loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
         heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
@@ -155,15 +156,16 @@ def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefo
         instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
         repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
         verbose_str = " -v" if verbose_tick.get() == 1 else ""
+        sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
 
-        single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -r " + resultfolder + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str + " " + imagefolder
+        single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -r " + resultfolder + sub_param_str + " " + imagefolder
         print(single_cmd)
         messagelabel.config(text="Created single CMD successfully")
 
 def check_addtoCMD(messagelabel, tick, param_name, param_value):
     if tick.get() == 1:
-        param_str = param_name + param_value 
-        messagelabel.config(text="Added parameter to CMD")   
+        param_str = param_name + param_value
+        messagelabel.config(text="Added parameter to CMD")
     else:
         param_str = ""
         messagelabel.config(text="Removed parameter from CMD")
