@@ -21,19 +21,23 @@ def choosefolder_insertwidget(messagelabel, folderpath, dialogname, widget):
 
 def setstate_combobox(messagelabel, event, combobox, label, default_value, addCMD_tick, addCMD_checkbutton):
     messagelabel.config(text="Set value for parameter")
-    if combobox.get() != default_value:
-        combobox.configure(foreground="blue")
+    currentvalue_combobox = combobox.get()
+    if combobox.get() != default_value and combobox.get() != "Other":
+        combobox.set("")
+        combobox.set(currentvalue_combobox)
+        combobox.configure(state="readonly", foreground="blue")
         label.config(fg="blue")
         addCMD_checkbutton['fg'] = 'blue'
         addCMD_tick.set(True)
-
-        if combobox.get() == "Other":
-            combobox.set("")
-            combobox.config(state="normal")
-        else:
-            combobox.config(state="readonly")
-
+    elif combobox.get() != default_value and combobox.get() == "Other":
+        combobox.set("")
+        combobox.configure(state="normal", foreground="blue")
+        label.config(fg="blue")
+        addCMD_checkbutton['fg'] = 'blue'
+        addCMD_tick.set(True)
     else:
+        combobox.set("")
+        combobox.set(currentvalue_combobox)
         combobox.configure(state="readonly", foreground="black")
         label.config(fg="black")
         addCMD_checkbutton['fg'] = 'black'
