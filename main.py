@@ -158,7 +158,7 @@ iteration_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add CMD", va
 iteration_addCMD_checkbutton.grid(row=5, column=3, sticky='w')
 
 disable_shortcuts_tick = tk.IntVar()
-disable_shortcuts_button = tk.Checkbutton(parameterframe, text="Disable Shortcuts", variable=disable_shortcuts_tick, command=lambda: select_unselect(message_label, disable_shortcuts_tick, "Disable shortcuts is selected", "Disable shortcuts is not selected"))
+disable_shortcuts_button = tk.Checkbutton(parameterframe, text="Disable Shortcuts", variable=disable_shortcuts_tick, command=lambda: select_unselect(message_label, disable_shortcuts_tick, disable_shortcuts_button, disable_shortcuts_addCMD_tick, disable_shortcuts_addCMD_checkbutton))
 disable_shortcuts_button.grid(row=6, column=0, sticky='e')
 disable_shortcuts_addCMD_tick = tk.BooleanVar()
 disable_shortcuts_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add CMD", variable=disable_shortcuts_addCMD_tick, command=lambda: check_addtoCMD(message_label, disable_shortcuts_addCMD_tick, "--disable-shortcuts ", ""))
@@ -225,7 +225,7 @@ repeat_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add CMD", varia
 repeat_addCMD_checkbutton.grid(row=12, column=3, sticky='w')
 
 verbose_tick = tk.IntVar()
-verbose_button = tk.Checkbutton(parameterframe, text="Display Verbose", variable=verbose_tick, command=lambda: select_unselect(message_label, verbose_tick, "Verbose display is selected", "Verbose display is not selected"))
+verbose_button = tk.Checkbutton(parameterframe, text="Display Verbose", variable=verbose_tick, command=lambda: select_unselect(message_label, verbose_tick, verbose_button, verbose_addCMD_tick, verbose_addCMD_checkbutton))
 verbose_button.grid(row=13, column=0, sticky='e')
 verbose_addCMD_tick = tk.BooleanVar()
 verbose_addCMD_checkbutton = tk.Checkbutton(parameterframe, text="Add CMD", variable=verbose_addCMD_tick, command=lambda: check_addtoCMD(message_label, verbose_addCMD_tick, "-v ", ""))

@@ -55,13 +55,17 @@ def toggle_widgetstate(messagelabel, tick, *widgets):
         for widget in widgets:
             widget.config(state=tk.DISABLED)
 
-def select_unselect(messagelabel, tick, tickinfo, untickinfo):
-    if tick.get() == 1:
+def select_unselect(messagelabel, item_tick, item_checkbutton, addCMD_tick, addCMD_checkbutton):
+    if item_tick.get() == 1:
         messagelabel.config(text="Checked parameter")
-        print(tickinfo)
+        item_checkbutton['fg'] = 'blue'
+        addCMD_checkbutton['fg'] = 'blue'
+        addCMD_tick.set(True)
     else:
         messagelabel.config(text="Unchecked parameter")
-        print(untickinfo)
+        item_checkbutton['fg'] = 'black'
+        addCMD_checkbutton['fg'] = 'black'
+        addCMD_tick.set(False)
 
 def document_function(messagelabel, window):
     messagelabel.config(text="Show command syntax usage")
