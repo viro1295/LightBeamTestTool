@@ -19,7 +19,7 @@ def choosefolder_insertwidget(messagelabel, folderpath, dialogname, widget):
     folderpath = filedialog.askdirectory(title=dialogname)
     widget.config(text=folderpath)
 
-def setstate_combobox(messagelabel, event, combobox, label, default_value, addCMD_tick, addCMD_checkbutton):
+def action_on_combobox(messagelabel, event, combobox, label, default_value, addCMD_tick, addCMD_checkbutton):
     messagelabel.config(text="Set value for parameter")
     currentvalue_combobox = combobox.get()
     if combobox.get() != default_value and combobox.get() != "Other":
