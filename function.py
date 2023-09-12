@@ -4,6 +4,13 @@ from tkinter import ttk, filedialog
 
 ################ChildFunction######################
 
+def choosefile_insertinputbox(messagelabel, filepath, dialogname, inputbox, addCMD_checkbutton):
+    messagelabel.config(text="Choose file from computer")
+    filepath = filedialog.askopenfilename(title=dialogname)
+    inputbox.delete(0, tk.END)
+    inputbox.insert(0, filepath)
+    if filepath != "":
+        addCMD_checkbutton.config(state=tk.NORMAL)
 
 def choosefile_insertwidget(messagelabel, filepath, dialogname, widget):
     messagelabel.config(text="Choose file from computer")
@@ -19,32 +26,64 @@ def choosefolder_insertwidget(messagelabel, folderpath, dialogname, widget):
     folderpath = filedialog.askdirectory(title=dialogname)
     widget.config(text=folderpath)
 
-def setstate_combobox(messagelabel, event, combobox):
+def action_on_combobox(messagelabel, event, combobox, label, default_value, addCMD_tick, addCMD_checkbutton):
     messagelabel.config(text="Set value for parameter")
-    if combobox.get() == "Other":
+    currentvalue_combobox = combobox.get()
+    if combobox.get() != default_value and combobox.get() != "Other":
         combobox.set("")
-        combobox.config(state="normal")
+        combobox.set(currentvalue_combobox)
+        combobox.configure(state="readonly", foreground="blue")
+        label.config(fg="blue")
+        addCMD_checkbutton['fg'] = 'blue'
+        addCMD_tick.set(True)
+    elif combobox.get() != default_value and combobox.get() == "Other":
+        combobox.set("")
+        combobox.configure(state="normal", foreground="blue")
+        label.config(fg="blue")
+        addCMD_checkbutton['fg'] = 'blue'
+        addCMD_tick.set(True)
     else:
-        combobox.config(state="readonly")
+        combobox.set("")
+        combobox.set(currentvalue_combobox)
+        combobox.configure(state="readonly", foreground="black")
+        label.config(fg="black")
+        addCMD_checkbutton['fg'] = 'black'
+        addCMD_tick.set(False)
         
-def toggle_widgetstate(messagelabel, tick, *widgets):
-    if tick.get() == 1:
+def action_on_choosefile_checkbutton(messagelabel, item_tick, item_checkbutton, entry_widget, button_widget, addCMD_tick, addCMD_checkbutton):
+    if item_tick.get() == 1:
         messagelabel.config(text="NORMAL state has been set")
-        for widget in widgets:
-            widget.config(state=tk.NORMAL)
+        item_checkbutton['fg'] = 'blue'
+        entry_widget.config(state=tk.NORMAL, fg="blue")
+        button_widget.config(state=tk.NORMAL)
     else:
         messagelabel.config(text="DISABLED state has been set")
-        widgets[0].delete(0, tk.END)
-        for widget in widgets:
-            widget.config(state=tk.DISABLED)
+        item_checkbutton['fg'] = 'black'
+        entry_widget.delete(0, tk.END)
+        entry_widget.config(state=tk.DISABLED, fg="black")
+        button_widget.config(state=tk.DISABLED)
+        addCMD_tick.set(False)
+        addCMD_checkbutton.config(state=tk.DISABLED, fg="black")
 
-def select_unselect(messagelabel, tick, tickinfo, untickinfo):
-    if tick.get() == 1:
+def action_on_choosefile_entrybox(event, entrybox, addCMD_tick, addCMD_checkbutton):
+    if entrybox.get() != "":
+        addCMD_checkbutton.config(state=tk.NORMAL)
+    else:
+        addCMD_tick.set(False)
+        addCMD_checkbutton['fg'] = 'black'
+        addCMD_checkbutton.config(state=tk.DISABLED)
+
+def select_unselect(messagelabel, item_tick, item_checkbutton, addCMD_tick, addCMD_checkbutton):
+    if item_tick.get() == 1:
         messagelabel.config(text="Checked parameter")
-        print(tickinfo)
+        item_checkbutton['fg'] = 'blue'
+        addCMD_checkbutton['fg'] = 'blue'
+        addCMD_tick.set(True)
     else:
         messagelabel.config(text="Unchecked parameter")
-        print(untickinfo)
+        item_checkbutton['fg'] = 'black'
+        addCMD_checkbutton['fg'] = 'black'
+        addCMD_tick.set(False)
 
 def document_function(messagelabel, window):
     messagelabel.config(text="Show command syntax usage")
@@ -162,14 +201,59 @@ def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefo
         print(single_cmd)
         messagelabel.config(text="Created single CMD successfully")
 
-def check_addtoCMD(messagelabel, tick, param_name, param_value):
-    if tick.get() == 1:
-        param_str = param_name + param_value
+def save_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+    hog_str = " -t " + hog if hog_tick.get() == 1 else ""
+    log_str = " -l " + log if log_tick.get() == 1 else ""
+    loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
+    heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
+    stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
+    iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
+    disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
+    threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
+    stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
+    slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
+    decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
+    instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
+    repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
+    verbose_str = " -v" if verbose_tick.get() == 1 else ""
+    sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
+    settings_str = lightbeam + configfile + resultfolder + sub_param_str + " " + imagefolder  
+    with open('Settings.txt', 'w') as file:
+        file.write(settings_str)
+    print(settings_str)
+    messagelabel.config(text="Save all settings in Settings.txt file")
+
+def check_addtoCMD_entrybox(messagelabel, addCMD_tick, addCMD_checkbutton):
+    if addCMD_tick.get() == 1:
         messagelabel.config(text="Added parameter to CMD")
+        addCMD_checkbutton['fg'] = 'blue'
     else:
-        param_str = ""
         messagelabel.config(text="Removed parameter from CMD")
-    print(param_str)
+        addCMD_checkbutton['fg'] = 'black'
+
+def check_addtoCMD_combobox(messagelabel, addCMD_tick, addCMD_checkbutton, label, combobox, default_value):
+    if addCMD_tick.get() == 1:
+        messagelabel.config(text="Added parameter to CMD")
+        addCMD_checkbutton['fg'] = 'blue'
+    else:
+        messagelabel.config(text="Removed parameter from CMD")
+        combobox.set(default_value)
+        combobox.configure(state="readonly", foreground="black")
+        label.config(fg="black")
+        addCMD_checkbutton['fg'] = 'black'
+        
+def check_addtoCMD_checkbutton(messagelabel, addCMD_tick, addCMD_checkbutton, item_tick, item_checkbutton):
+    if addCMD_tick.get() == 1:
+        messagelabel.config(text="Added parameter to CMD")
+        item_tick.set(True)
+        item_checkbutton['fg'] = 'blue'
+        addCMD_checkbutton['fg'] = 'blue'
+    else:
+        messagelabel.config(text="Removed parameter from CMD")
+        item_tick.set(False)
+        item_checkbutton['fg'] = 'black'
+        addCMD_checkbutton['fg'] = 'black'
+        
 
 ##################EndChildFunction####################
 
