@@ -205,14 +205,37 @@ def save_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder
     print(settings_str)
     messagelabel.config(text="Save all settings in Settings.txt file")
 
-def check_addtoCMD(messagelabel, tick, param_name, param_value):
-    if tick.get() == 1:
-        param_str = param_name + param_value
+def check_addtoCMD_entrybox(messagelabel, addCMD_tick, addCMD_checkbutton):
+    if addCMD_tick.get() == 1:
         messagelabel.config(text="Added parameter to CMD")
+        addCMD_checkbutton['fg'] = 'blue'
     else:
-        param_str = ""
         messagelabel.config(text="Removed parameter from CMD")
-    print(param_str)
+        addCMD_checkbutton['fg'] = 'black'
+
+def check_addtoCMD_combobox(messagelabel, addCMD_tick, addCMD_checkbutton, label, combobox, default_value):
+    if addCMD_tick.get() == 1:
+        messagelabel.config(text="Added parameter to CMD")
+        addCMD_checkbutton['fg'] = 'blue'
+    else:
+        messagelabel.config(text="Removed parameter from CMD")
+        combobox.set(default_value)
+        combobox.configure(state="readonly", foreground="black")
+        label.config(fg="black")
+        addCMD_checkbutton['fg'] = 'black'
+        
+def check_addtoCMD_checkbutton(messagelabel, addCMD_tick, addCMD_checkbutton, item_tick, item_checkbutton):
+    if addCMD_tick.get() == 1:
+        messagelabel.config(text="Added parameter to CMD")
+        item_tick.set(True)
+        item_checkbutton['fg'] = 'blue'
+        addCMD_checkbutton['fg'] = 'blue'
+    else:
+        messagelabel.config(text="Removed parameter from CMD")
+        item_tick.set(False)
+        item_checkbutton['fg'] = 'black'
+        addCMD_checkbutton['fg'] = 'black'
+        
 
 ##################EndChildFunction####################
 
