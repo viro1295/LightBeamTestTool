@@ -4,6 +4,13 @@ from tkinter import ttk, filedialog
 
 ################ChildFunction######################
 
+def choosefile_insertinputbox(messagelabel, filepath, dialogname, inputbox, addCMD_checkbutton):
+    messagelabel.config(text="Choose file from computer")
+    filepath = filedialog.askopenfilename(title=dialogname)
+    inputbox.delete(0, tk.END)
+    inputbox.insert(0, filepath)
+    if filepath != "":
+        addCMD_checkbutton.config(state=tk.NORMAL)
 
 def choosefile_insertwidget(messagelabel, filepath, dialogname, widget):
     messagelabel.config(text="Choose file from computer")
@@ -42,18 +49,29 @@ def action_on_combobox(messagelabel, event, combobox, label, default_value, addC
         label.config(fg="black")
         addCMD_checkbutton['fg'] = 'black'
         addCMD_tick.set(False)
-
         
-def toggle_widgetstate(messagelabel, tick, *widgets):
-    if tick.get() == 1:
+def action_on_choosefile_checkbutton(messagelabel, item_tick, item_checkbutton, entry_widget, button_widget, addCMD_tick, addCMD_checkbutton):
+    if item_tick.get() == 1:
         messagelabel.config(text="NORMAL state has been set")
-        for widget in widgets:
-            widget.config(state=tk.NORMAL)
+        item_checkbutton['fg'] = 'blue'
+        entry_widget.config(state=tk.NORMAL, fg="blue")
+        button_widget.config(state=tk.NORMAL)
     else:
         messagelabel.config(text="DISABLED state has been set")
-        widgets[0].delete(0, tk.END)
-        for widget in widgets:
-            widget.config(state=tk.DISABLED)
+        item_checkbutton['fg'] = 'black'
+        entry_widget.delete(0, tk.END)
+        entry_widget.config(state=tk.DISABLED, fg="black")
+        button_widget.config(state=tk.DISABLED)
+        addCMD_tick.set(False)
+        addCMD_checkbutton.config(state=tk.DISABLED, fg="black")
+
+def action_on_choosefile_entrybox(event, entrybox, addCMD_tick, addCMD_checkbutton):
+    if entrybox.get() != "":
+        addCMD_checkbutton.config(state=tk.NORMAL)
+    else:
+        addCMD_tick.set(False)
+        addCMD_checkbutton['fg'] = 'black'
+        addCMD_checkbutton.config(state=tk.DISABLED)
 
 def select_unselect(messagelabel, item_tick, item_checkbutton, addCMD_tick, addCMD_checkbutton):
     if item_tick.get() == 1:
