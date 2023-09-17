@@ -1,4 +1,6 @@
 # import subprocess
+import os
+import shutil
 import tkinter as tk
 from tkinter import ttk, filedialog
 
@@ -20,6 +22,22 @@ def choosefile_insertwidget(messagelabel, filepath, dialogname, widget):
     elif isinstance(widget, tk.Entry):
         widget.delete(0, tk.END)
         widget.insert(0, filepath)
+
+def choosefile_singleimage(messagelabel, dialogname, imagefolderlabel):
+    messagelabel.config(text="Choose file from computer")
+    filepath = filedialog.askopenfilename(title=dialogname)
+    current_dir = os.getcwd()
+    OneImage_dir = os.path.join(current_dir, 'OneImage')
+    if os.path.exists(OneImage_dir):
+        shutil.rmtree(OneImage_dir)
+        os.makedirs(OneImage_dir)
+    else:
+        os.makedirs(OneImage_dir)
+    if filepath != "":
+        shutil.copy(filepath, OneImage_dir)
+        imagefolderlabel.config(text=OneImage_dir.replace("\\","/"))
+    else:
+        imagefolderlabel.config(text="")
 
 def choosefolder_insertwidget(messagelabel, folderpath, dialogname, widget):
     messagelabel.config(text="Choose folder from computer")

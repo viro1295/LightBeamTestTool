@@ -8,6 +8,7 @@ lightbeam = ""
 configure = ""
 resultfolder = ""
 imagefolder = ""
+singleimage = ""
 hogfile = ""
 log_file = ""
 message = "This is message box!"
@@ -66,6 +67,12 @@ imagefolder_button = tk.Button(toolbar, image=imagefolder_photo, text="ImageFold
 imagefolder_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, imagefolder_button, "ImageFolder"))
 imagefolder_button.bind("<Leave>",lambda event: hide_tooltip(event, imagefolder_button))
 imagefolder_button.pack(side=tk.LEFT, padx=2, pady=2)
+
+singleimage_photo = ImageTk.PhotoImage(Image.open(".\\icon\\singleimage_icon.jpg"))
+singleimage_button = tk.Button(toolbar, image=singleimage_photo, text="SingleImage", command=lambda: choosefile_singleimage(message_label, "Choose 1 image file", imagefolder_label))
+singleimage_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, singleimage_button, "SingleImage"))
+singleimage_button.bind("<Leave>",lambda event: hide_tooltip(event, singleimage_button))
+singleimage_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 ###################ConfigInfoFrame###################
 configframe = tk.Frame(root, borderwidth=0.5, relief="solid")
