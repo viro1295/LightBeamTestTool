@@ -1,4 +1,4 @@
-# import subprocess
+import subprocess
 import os
 import shutil
 import tkinter as tk
@@ -186,7 +186,9 @@ for %%f in (%CSV_FILES%) do (
         messagelabel.config(text="Created ExBatch.bat file in current folder")
      
 
-def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+def execute_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+    lightbeam_exceptname = lightbeam.rsplit("/", 1)[0] + "/"
+    lightbeam_name = lightbeam.split("/")[-1]
     notify = ""
     if not lightbeam:
         notify += "Please choose LightBeam file!\n"
@@ -215,9 +217,15 @@ def create_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefo
         verbose_str = " -v" if verbose_tick.get() == 1 else ""
         sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
 
-        single_cmd = ".\\" + lightbeam + " decode -c " + configfile + " -r " + resultfolder + sub_param_str + " " + imagefolder
+        single_cmd = ".\\" + lightbeam_name + " decode -c " + configfile + " -r " + resultfolder + sub_param_str + " " + imagefolder + " >> cmd_output.txt"
         print(single_cmd)
-        messagelabel.config(text="Created single CMD successfully")
+        directory = lightbeam_exceptname.replace("/","\\")
+
+        with open(lightbeam_exceptname + 'cmd_output.txt', 'w') as file:
+            file.write(single_cmd + "\n")
+
+        subprocess.call(single_cmd, cwd=directory, shell=True)
+        messagelabel.config(text="Run single CMD successfully")
 
 def save_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
     hog_str = " -t " + hog if hog_tick.get() == 1 else ""

@@ -1,4 +1,4 @@
-# import subprocess
+import subprocess
 import tkinter as tk
 from tkinter import ttk, filedialog
 from PIL import ImageTk, Image
@@ -30,7 +30,7 @@ menubar.add_cascade(label="File", menu=file_menu)
 
 run_menu = tk.Menu(menubar, tearoff=0)
 run_menu.add_command(label="Create BatchFile", command=lambda: create_batch_file(message_label, lightbeam_label.cget("text").split("/")[-1], hogfile_addCMD_tick, hogfile_inputbox.get(), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
-run_menu.add_command(label="Create Single CMD", command=lambda: create_single_cmd(message_label, lightbeam_label.cget("text").split("/")[-1], configure_label.cget("text").replace("/","\\"), resultfolder_label.cget("text").replace("/","\\"), imagefolder_label.cget("text").replace("/","\\"), hogfile_addCMD_tick, hogfile_inputbox.get(), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
+run_menu.add_command(label="Execute Single CMD", command=lambda: execute_single_cmd(message_label, lightbeam_label.cget("text"), configure_label.cget("text").replace("/","\\"), resultfolder_label.cget("text").replace("/","\\"), imagefolder_label.cget("text").replace("/","\\"), hogfile_addCMD_tick, hogfile_inputbox.get(), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
 menubar.add_cascade(label="Run", menu=run_menu)
 
 help_menu = tk.Menu(menubar, tearoff=0)
@@ -73,6 +73,12 @@ singleimage_button = tk.Button(toolbar, image=singleimage_photo, text="SingleIma
 singleimage_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, singleimage_button, "SingleImage"))
 singleimage_button.bind("<Leave>",lambda event: hide_tooltip(event, singleimage_button))
 singleimage_button.pack(side=tk.LEFT, padx=2, pady=2)
+
+play_photo = ImageTk.PhotoImage(Image.open(".\\icon\\play_icon.jpg"))
+play_button = tk.Button(toolbar, image=play_photo, text="Play", command=lambda: execute_single_cmd(message_label, lightbeam_label.cget("text"), configure_label.cget("text").replace("/","\\"), resultfolder_label.cget("text").replace("/","\\"), imagefolder_label.cget("text").replace("/","\\"), hogfile_addCMD_tick, hogfile_inputbox.get(), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
+play_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, play_button, "Execute CMD"))
+play_button.bind("<Leave>",lambda event: hide_tooltip(event, play_button))
+play_button.pack(side=tk.LEFT, padx=2, pady=2)
 
 ###################ConfigInfoFrame###################
 configframe = tk.Frame(root, borderwidth=0.5, relief="solid")
