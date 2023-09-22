@@ -2,7 +2,8 @@ import subprocess
 import tkinter as tk
 from tkinter import ttk, filedialog
 from PIL import ImageTk, Image
-from function import *
+from utility import *
+from generate import *
 
 lightbeam = ""
 configure = ""
