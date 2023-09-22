@@ -280,6 +280,12 @@ def check_addtoCMD_checkbutton(messagelabel, addCMD_tick, addCMD_checkbutton, it
         item_checkbutton['fg'] = 'black'
         addCMD_checkbutton['fg'] = 'black'
         
+def open_explorer(messagelabel, path):
+    if path != "":
+        subprocess.Popen(f'explorer {path}', shell=True)
+        messagelabel.config(text="Open File Explorer")
+    else:
+        messagelabel.config(text="Not found Directory")
 
 ##################EndChildFunction####################
 
