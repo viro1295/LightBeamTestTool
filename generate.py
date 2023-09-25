@@ -4,30 +4,81 @@ import shutil
 import csv
 import tkinter as tk
 from tkinter import ttk, filedialog
+import xml.etree.ElementTree as ET
+import re
 
 ################GenerateFunctions######################
 
-def create_batch_file(messagelabel, lightbeam, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
-    if not lightbeam:
-        messagelabel.config(text="Please choose LightBeam file!")
-    else:
-        hog_str = " -t " + hog if hog_tick.get() == 1 else ""
-        log_str = " -l " + log if log_tick.get() == 1 else ""
-        loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
-        heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
-        stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
-        iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
-        disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
-        threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
-        stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
-        slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
-        decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
-        instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
-        repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
-        verbose_str = " -v" if verbose_tick.get() == 1 else ""
-        sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
+# TẠO CSV TestSuite - Windows
+def create_csv_testsuite(messagelabel):
+	fileload = filedialog.askopenfilename(title="Choose file VL5.load").replace("/","\\")
+	vlconfigfolder = filedialog.askdirectory(title="Choose VL configure folder").replace("/","\\")
+	itcimagefolder = filedialog.askdirectory(title="Choose itc-imagefolder").replace("/","\\")
+	savefolder = filedialog.askdirectory(title="Choose folder to save CSV testsuite").replace("/","\\")
+	testresultfolder = filedialog.askdirectory(title="Choose folder contain test results").replace("/","\\")
+	
+	print(fileload)
+	print(savefolder)
+	print(vlconfigfolder)
+	print(testresultfolder)
+	print(itcimagefolder)
 
-        batch_content = '''@echo off
+	if fileload != "" and savefolder != "" and vlconfigfolder != "" and testresultfolder != "" and itcimagefolder:
+		messagelabel.config(text="Creating...")
+
+		# Mở tệp XML
+		tree = ET.parse(fileload)
+		root = tree.getroot()
+
+		# Tìm các thẻ cần sao chép dữ liệu
+		for symbol in root.findall('.//symbology'):
+			# Dùng regex định dạng lại tên file từ content thẻ Symbology
+			codename = re.sub(r'[- \t\n]+', '_', symbol.text).rstrip("_")
+			filename = savefolder + "\\" + codename + '.csv'
+
+			content = ""
+			for test_case in symbol.findall('.//TestCase'):
+				VLC = test_case.find('VLC_Path').text
+				TCID = test_case.find('ExpectResultID').text
+				ITC = test_case.find('Img_Path').text
+				
+				VLC_Edit = VLC.replace("Functional_Testing\\VL5_Configuration", vlconfigfolder + "\\Functional_Testing\\VL5_Configuration")
+				TCID_Edit = testresultfolder + "\\" + codename + "\\" + TCID 
+				ITC_Edit =  itcimagefolder + "\\" + ITC.split("\\")[-1].replace(".itc","")
+
+				row = VLC_Edit + "," + TCID_Edit + "," + ITC_Edit + "\n"
+				content = content + row
+
+			# Tạo tệp mới và ghi dữ liệu vào đó
+			with open(filename, 'w') as f:
+				f.write(content)
+		messagelabel.config(text="Created CSV TestSuite successfully")
+
+	else:
+		messagelabel.config(text="Not enough input data to create CSV TestSuite")
+
+
+def create_batch_file(messagelabel, lightbeam, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
+	if not lightbeam:
+		messagelabel.config(text="Please choose LightBeam file!")
+	else:
+		hog_str = " -t " + hog if hog_tick.get() == 1 else ""
+		log_str = " -l " + log if log_tick.get() == 1 else ""
+		loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
+		heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
+		stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
+		iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
+		disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
+		threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
+		stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
+		slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
+		decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
+		instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
+		repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
+		verbose_str = " -v" if verbose_tick.get() == 1 else ""
+		sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
+
+		batch_content = '''@echo off
 setlocal enabledelayedexpansion
 set CSV_FILES=%1*.csv
 for %%f in (%CSV_FILES%) do (
@@ -37,80 +88,60 @@ for %%f in (%CSV_FILES%) do (
     .\\{} decode -c %%a -r %%b{} %%c > %%b.txt
   )
 )'''.format(lightbeam, sub_param_str)
-        with open('ExBatch.bat', 'w') as file:
-            file.write(batch_content)
-        messagelabel.config(text="Created ExBatch.bat file in current folder")
-     
+		file_path = filedialog.asksaveasfilename(defaultextension=".bat")
+		if file_path:
+			with open(file_path, 'w') as file:
+				file.write(batch_content)
+			messagelabel.config(text="Created ExBatch.bat file in current folder")
+	 
 
 def execute_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
-    lightbeam_exceptname = lightbeam.rsplit("/", 1)[0] + "/"
-    lightbeam_name = lightbeam.split("/")[-1]
-    notify = ""
-    if not lightbeam:
-        notify += "Please choose LightBeam file!\n"
-    if not configfile:
-        notify += "Please choose configure file!\n"
-    if not resultfolder:
-        notify += "Please choose result folder!\n"
-    if not imagefolder:
-        notify += "Please choose image folder!\n"
-    messagelabel.config(text=notify)
+	lightbeam_exceptname = lightbeam.rsplit("/", 1)[0] + "/"
+	lightbeam_name = lightbeam.split("/")[-1]
+	notify = ""
+	if not lightbeam:
+		notify += "Please choose LightBeam file!\n"
+	if not configfile:
+		notify += "Please choose configure file!\n"
+	if not resultfolder:
+		notify += "Please choose result folder!\n"
+	if not imagefolder:
+		notify += "Please choose image folder!\n"
+	messagelabel.config(text=notify)
 
-    if lightbeam and configfile and resultfolder and imagefolder:
-        hog_str = " -t " + hog if hog_tick.get() == 1 else ""
-        log_str = " -l " + log if log_tick.get() == 1 else ""
-        loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
-        heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
-        stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
-        iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
-        disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
-        threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
-        stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
-        slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
-        decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
-        instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
-        repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
-        verbose_str = " -v" if verbose_tick.get() == 1 else ""
-        sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
+	if lightbeam and configfile and resultfolder and imagefolder:
+		hog_str = " -t " + hog if hog_tick.get() == 1 else ""
+		log_str = " -l " + log if log_tick.get() == 1 else ""
+		loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
+		heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
+		stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
+		iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
+		disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
+		threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
+		stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
+		slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
+		decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
+		instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
+		repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
+		verbose_str = " -v" if verbose_tick.get() == 1 else ""
+		sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
 
-        single_cmd = ".\\" + lightbeam_name + " decode -c " + configfile + " -r " + resultfolder + sub_param_str + " " + imagefolder + " >> cmd_output.txt"
-        print(single_cmd)
-        directory = lightbeam_exceptname.replace("/","\\")
+		single_cmd = ".\\" + lightbeam_name + " decode -c " + configfile + " -r " + resultfolder + sub_param_str + " " + imagefolder + " >> cmd_output.txt"
+		print(single_cmd)
+		directory = lightbeam_exceptname.replace("/","\\")
 
-        with open(lightbeam_exceptname + 'cmd_output.txt', 'w') as file:
-            file.write(single_cmd + "\n")
+		with open(lightbeam_exceptname + 'cmd_output.txt', 'w') as file:
+			file.write(single_cmd + "\n")
 
-        subprocess.call(single_cmd, cwd=directory, shell=True)
-        messagelabel.config(text="Run single CMD successfully")
-
-# def save_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
-#     hog_str = " -t " + hog if hog_tick.get() == 1 else ""
-#     log_str = " -l " + log if log_tick.get() == 1 else ""
-#     loglevel_str = " --log_level " + loglevel if loglevel_tick.get() == 1 else ""
-#     heap_memory_str = " -m " + heap_memory if heap_memory_tick.get() == 1 else ""
-#     stack_memory_str = " --stack " + stack_memory if stack_memory_tick.get() == 1 else ""
-#     iteration_str = " -i " + iteration if iteration_tick.get() == 1 else ""
-#     disable_shortcuts_str = " --disable-shortcuts" if disable_shortcuts_tick.get() == 1 else ""
-#     threads_number_str = " --threads " + threads_number if threads_number_tick.get() == 1 else ""
-#     stop_after_str = " --stop_after_labels " + stop_after if stop_after_tick.get() == 1 else ""
-#     slice_height_str = " --progressive_slice_height " + slice_height if slice_height_tick.get() == 1 else ""
-#     decode_timeout_str = " --decode_timeout " + decode_timeout if decode_timeout_tick.get() == 1 else ""
-#     instances_number_str = " --mip " + instances_number if instances_number_tick.get() == 1 else ""
-#     repeat_str = " --repeat " + repeat if repeat_tick.get() == 1 else ""
-#     verbose_str = " -v" if verbose_tick.get() == 1 else ""
-#     sub_param_str = hog_str + log_str + loglevel_str + heap_memory_str + stack_memory_str + iteration_str + disable_shortcuts_str + threads_number_str + stop_after_str + slice_height_str + decode_timeout_str + instances_number_str + repeat_str + verbose_str
-#     settings_str = lightbeam + configfile + resultfolder + sub_param_str + " " + imagefolder  
-#     with open('Settings.txt', 'w') as file:
-#         file.write(settings_str)
-#     print(settings_str)
-#     messagelabel.config(text="Save all settings in Settings.txt file")
+		subprocess.call(single_cmd, cwd=directory, shell=True)
+		messagelabel.config(text="Run single CMD successfully")
 
 def save_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder):
 	file_path = filedialog.asksaveasfilename(defaultextension=".csv")
 	if file_path:
-	    with open(file_path, 'w', newline='') as file:
-	        writer = csv.writer(file)
-	        writer.writerow([lightbeam, configfile, resultfolder, imagefolder])
+		with open(file_path, 'w', newline='') as file:
+			writer = csv.writer(file)
+			writer.writerow([lightbeam, configfile, resultfolder, imagefolder])
 	messagelabel.config(text="Save Settings information")
 
 def load_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder):
@@ -124,3 +155,5 @@ def load_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder
 				resultfolder.config(text = row[2])
 				imagefolder.config(text = row[3])
 	messagelabel.config(text="Load Settings information")
+
+
