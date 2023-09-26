@@ -93,7 +93,7 @@ for %%f in (%CSV_FILES%) do (
 			with open(file_path, 'w') as file:
 				file.write(batch_content)
 			messagelabel.config(text="Created ExBatch.bat file in current folder")
-	 
+
 
 def execute_single_cmd(messagelabel, lightbeam, configfile, resultfolder, imagefolder, hog_tick, hog, log_tick, log, loglevel_tick, loglevel,  heap_memory_tick, heap_memory, stack_memory_tick, stack_memory, iteration_tick, iteration, disable_shortcuts_tick, threads_number_tick, threads_number, stop_after_tick, stop_after, slice_height_tick, slice_height, decode_timeout_tick, decode_timeout, instances_number_tick, instances_number, repeat_tick, repeat, verbose_tick):
 	lightbeam_exceptname = lightbeam.rsplit("/", 1)[0] + "/"
@@ -142,7 +142,7 @@ def save_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder
 		with open(file_path, 'w', newline='') as file:
 			writer = csv.writer(file)
 			writer.writerow([lightbeam, configfile, resultfolder, imagefolder])
-	messagelabel.config(text="Save Settings information")
+		messagelabel.config(text="Save Settings information")
 
 def load_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder):
 	file_path = filedialog.askopenfilename()
@@ -154,6 +154,108 @@ def load_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder
 				configfile.config(text = row[1])
 				resultfolder.config(text = row[2])
 				imagefolder.config(text = row[3])
-	messagelabel.config(text="Load Settings information")
+		messagelabel.config(text="Load Settings information")
+
+def compare_results(messagelabel):
+	file_path = filedialog.asksaveasfilename(defaultextension=".csv")
+	if file_path:
+		vl1_results_folder = filedialog.askdirectory(title="Choose TestResults folder of VL1").replace("/","\\")
+		vl2_results_folder = filedialog.askdirectory(title="Choose TestResults folder of VL2").replace("/","\\")
+
+		result_string = "CODE,TCID,ConfigureFile,Image,NumberOfDecoded1,NumberOfDecoded2,ProcessingTime1,ProcessingTime2,DecodeTime1,DecodeTime2,Symbology1,Symbology2,Content1,Content2,LabelIndex,NOTE\n"
+
+		# Thư mục và thư mục con chứa xml files
+		for dirpath, dirnames, filenames in os.walk(vl1_results_folder):
+			for filename in filenames:
+				if filename.endswith('.xml'):
+					code = dirpath.split("\\")[-1]
+					TCID = filename.split(".")[0]
+					# print(filename,dirpath,code,TCID)
+
+					# Đọc dữ liệu từ 2 file XML
+					tree1 = ET.parse(vl1_results_folder+"\\"+code+"\\"+filename)
+					root1 = tree1.getroot()
+					tree2 = ET.parse(vl2_results_folder+"\\"+code+"\\"+filename)
+					root2 = tree2.getroot()
+
+					for sequence_result1 in root1.findall('.//SequenceResult'):
+						img_string1 = sequence_result1.find('.//string').text
+						cfg_string1 = sequence_result1.find('ConfigurationFile').text
+						num_result1 = len(sequence_result1.findall('.//Result'))
+						num_result1_str = str(num_result1)
+						for sequence_result2 in root2.findall('.//SequenceResult'):
+							img_string2 = sequence_result2.find('.//string').text
+							cfg_string2 = sequence_result2.find('ConfigurationFile').text
+							num_result2 = len(sequence_result2.findall('.//Result'))
+							num_result2_str = str(num_result2)
+
+							# Kiểm tra nếu hình giống nhau ở 2 file thì so sánh các chỉ số
+							if img_string2 == img_string1:
+								if num_result1 == num_result2:
+									if num_result1 > 0:
+										for i in range(1,num_result1+1):
+											label_index_str_tmp = str(i-1)
+											# Khởi tạo kq rỗng1
+											processing_time1_tmp = ""
+											decode_time1_tmp = ""
+											symbology1_tmp = ""
+											content_in_hexadecimal1_tmp = ""
+											# Khởi tạo kq rỗng2
+											processing_time2_tmp = ""
+											decode_time2_tmp = ""
+											symbology2_tmp = ""
+											content_in_hexadecimal2_tmp = ""
+
+											# Lấy thông số từ file 1 để so sánh
+											processing_time1 = sequence_result1.find('ProcessingTime').text
+											decode_time1 = sequence_result1.find(f'.//Result[{i}]/DecodeTime').text
+											symbology1 = sequence_result1.find(f'.//Result[{i}]/Symbology').text
+											content_in_hexadecimal1 = sequence_result1.find(f'.//Result[{i}]/ContentInHexadecimal').text
+											# Lấy thông số từ file 2 để so sánh
+											processing_time2 = sequence_result2.find('ProcessingTime').text
+											decode_time2 = sequence_result2.find(f'.//Result[{i}]/DecodeTime').text
+											symbology2 = sequence_result2.find(f'.//Result[{i}]/Symbology').text
+											content_in_hexadecimal2 = sequence_result2.find(f'.//Result[{i}]/ContentInHexadecimal').text
+
+											# So sánh
+											if abs((float(processing_time1)-float(processing_time2))/(float(processing_time1)+float(processing_time2))) > 0.2:
+												processing_time1_tmp = processing_time1
+												processing_time2_tmp = processing_time2
+											if abs((float(decode_time1)-float(decode_time2))/(float(decode_time1)+float(decode_time2))) > 0.2:
+												decode_time1_tmp = decode_time1
+												decode_time2_tmp = decode_time2
+											if symbology1 != symbology2:
+												symbology1_tmp = symbology1 
+												symbology2_tmp = symbology2 
+											if content_in_hexadecimal1 != content_in_hexadecimal2:
+												content_in_hexadecimal1_tmp = content_in_hexadecimal1 
+												content_in_hexadecimal2_tmp = content_in_hexadecimal2
+
+											#Nối chuỗi kết quả
+											if processing_time1_tmp != "" or processing_time2_tmp != "" or decode_time1_tmp != "" or decode_time2_tmp != "" or symbology1_tmp != "" or symbology2_tmp != "" or content_in_hexadecimal1_tmp != "" or content_in_hexadecimal2_tmp != "":
+												result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + ",,," + processing_time1_tmp + "," + processing_time2_tmp + "," + decode_time1_tmp + "," + decode_time2_tmp + "," + symbology1_tmp + "," + symbology2_tmp + "," + content_in_hexadecimal1_tmp + "," + content_in_hexadecimal2_tmp + "," + label_index_str_tmp + ",Failed\n"
+					
+									else:
+										processing_time1_tmp = ""
+										processing_time2_tmp = ""
+
+										# Lấy thông số để so sánh
+										processing_time1 = sequence_result1.find('ProcessingTime').text
+										processing_time2 = sequence_result2.find('ProcessingTime').text
+										# So sánh
+										if abs((float(processing_time1)-float(processing_time2))/(float(processing_time1)+float(processing_time2))) > 0.2:
+											processing_time1_tmp = processing_time1
+											processing_time2_tmp = processing_time2
+										#Nối chuỗi kết quả
+										if processing_time1_tmp != "" or processing_time2_tmp != "":
+											result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + ",,," + processing_time1_tmp + "," + processing_time2_tmp + ",,,,,,,,Failed\n"
+
+								else:
+									result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + "," + num_result1_str + "," + num_result2_str + ",,,,,,,,,,Failed\n"
+		# Tạo file kết quả và ghi dữ liệu vào đó
+		with open(file_path, 'w') as f:
+			f.write(result_string)
+		messagelabel.config(text="Comparison completed")
+
 
 
