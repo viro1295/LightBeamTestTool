@@ -158,11 +158,12 @@ def load_settings(messagelabel, lightbeam, configfile, resultfolder, imagefolder
 
 def compare_results(messagelabel):
 	file_path = filedialog.asksaveasfilename(defaultextension=".csv")
+	messagelabel.config(text="Comparing...")
 	if file_path:
 		vl1_results_folder = filedialog.askdirectory(title="Choose TestResults folder of VL1").replace("/","\\")
 		vl2_results_folder = filedialog.askdirectory(title="Choose TestResults folder of VL2").replace("/","\\")
 
-		result_string = "CODE,TCID,ConfigureFile,Image,NumberOfDecoded1,NumberOfDecoded2,ProcessingTime1,ProcessingTime2,DecodeTime1,DecodeTime2,Symbology1,Symbology2,Content1,Content2,LabelIndex,NOTE\n"
+		result_string = "CODE,TCID,ConfigureFile,Image,NumberOfDecoded1,NumberOfDecoded2,ProcessingTime1,ProcessingTime2,DecodeTime1,DecodeTime2,Symbology1,Symbology2,Content1,Content2,LabelIndex,ErrorType\n"
 
 		# Thư mục và thư mục con chứa xml files
 		for dirpath, dirnames, filenames in os.walk(vl1_results_folder):
@@ -217,23 +218,29 @@ def compare_results(messagelabel):
 											symbology2 = sequence_result2.find(f'.//Result[{i}]/Symbology').text
 											content_in_hexadecimal2 = sequence_result2.find(f'.//Result[{i}]/ContentInHexadecimal').text
 
+											note_tmp = ""
+
 											# So sánh
-											if abs((float(processing_time1)-float(processing_time2))/(float(processing_time1)+float(processing_time2))) > 0.2:
-												processing_time1_tmp = processing_time1
-												processing_time2_tmp = processing_time2
-											if abs((float(decode_time1)-float(decode_time2))/(float(decode_time1)+float(decode_time2))) > 0.2:
-												decode_time1_tmp = decode_time1
-												decode_time2_tmp = decode_time2
+											if (float(processing_time2)-float(processing_time1))/(float(processing_time1)+float(processing_time2)) > 0.2:
+												processing_time1_tmp = str(round(float(processing_time1), 2))
+												processing_time2_tmp = str(round(float(processing_time2), 2))
+												note_tmp += "ProcessingTime."
+											if (float(decode_time2)-float(decode_time1))/(float(decode_time1)+float(decode_time2)) > 0.2:
+												decode_time1_tmp = str(round(float(decode_time1), 2))
+												decode_time2_tmp = str(round(float(decode_time2), 2))
+												note_tmp += "DecodeTime."
 											if symbology1 != symbology2:
 												symbology1_tmp = symbology1 
 												symbology2_tmp = symbology2 
+												note_tmp += "Symbology."
 											if content_in_hexadecimal1 != content_in_hexadecimal2:
 												content_in_hexadecimal1_tmp = content_in_hexadecimal1 
 												content_in_hexadecimal2_tmp = content_in_hexadecimal2
+												note_tmp += "Content."
 
 											#Nối chuỗi kết quả
 											if processing_time1_tmp != "" or processing_time2_tmp != "" or decode_time1_tmp != "" or decode_time2_tmp != "" or symbology1_tmp != "" or symbology2_tmp != "" or content_in_hexadecimal1_tmp != "" or content_in_hexadecimal2_tmp != "":
-												result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + ",,," + processing_time1_tmp + "," + processing_time2_tmp + "," + decode_time1_tmp + "," + decode_time2_tmp + "," + symbology1_tmp + "," + symbology2_tmp + "," + content_in_hexadecimal1_tmp + "," + content_in_hexadecimal2_tmp + "," + label_index_str_tmp + ",Failed\n"
+												result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + ",,," + processing_time1_tmp + "," + processing_time2_tmp + "," + decode_time1_tmp + "," + decode_time2_tmp + "," + symbology1_tmp + "," + symbology2_tmp + "," + content_in_hexadecimal1_tmp + "," + content_in_hexadecimal2_tmp + "," + label_index_str_tmp + "," + note_tmp +"\n"
 					
 									else:
 										processing_time1_tmp = ""
@@ -243,15 +250,15 @@ def compare_results(messagelabel):
 										processing_time1 = sequence_result1.find('ProcessingTime').text
 										processing_time2 = sequence_result2.find('ProcessingTime').text
 										# So sánh
-										if abs((float(processing_time1)-float(processing_time2))/(float(processing_time1)+float(processing_time2))) > 0.2:
-											processing_time1_tmp = processing_time1
-											processing_time2_tmp = processing_time2
+										if (float(processing_time2)-float(processing_time1))/(float(processing_time1)+float(processing_time2)) > 0.2:
+											processing_time1_tmp = str(round(float(processing_time1), 2))
+											processing_time2_tmp = str(round(float(processing_time2), 2))
 										#Nối chuỗi kết quả
 										if processing_time1_tmp != "" or processing_time2_tmp != "":
-											result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + ",,," + processing_time1_tmp + "," + processing_time2_tmp + ",,,,,,,,Failed\n"
+											result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + ",,," + processing_time1_tmp + "," + processing_time2_tmp + ",,,,,,,,ProcessingTime\n"
 
 								else:
-									result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + "," + num_result1_str + "," + num_result2_str + ",,,,,,,,,,Failed\n"
+									result_string = result_string + code + "," + TCID + "," + cfg_string1 + ","+ img_string1 + "," + num_result1_str + "," + num_result2_str + ",,,,,,,,,,NumberOfDecoded\n"
 		# Tạo file kết quả và ghi dữ liệu vào đó
 		with open(file_path, 'w') as f:
 			f.write(result_string)
