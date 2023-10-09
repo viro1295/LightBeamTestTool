@@ -1,9 +1,13 @@
+import io
+import base64
 import subprocess
 import tkinter as tk
 from tkinter import ttk, filedialog
 from PIL import ImageTk, Image
 from utility import *
 from generate import *
+from base64img import *
+
 
 lightbeam = ""
 configure = ""
@@ -17,7 +21,7 @@ message = "This is message box!"
 ###GUI###
 root = tk.Tk()
 root.title("LightBeam test tool")
-root.iconbitmap(".\\icon\\lightbeam_icon.ico")
+root.iconphoto(False, ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(lightbeam_icon)))))
 root.geometry("800x600")
 
 ##################MenuBar##################
@@ -56,37 +60,37 @@ root.config(menu=menubar)
 toolbar = tk.Frame(root)
 toolbar.pack(side=tk.TOP, fill=tk.X)
 
-lightbeam_button_photo = ImageTk.PhotoImage(Image.open(".\\icon\\lightbeam_file_icon.jpg"))
+lightbeam_button_photo = ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(lightbeam_file_icon))))
 lightbeam_button = tk.Button(toolbar, image=lightbeam_button_photo, text="LightBeam", command=lambda: choosefile_insertwidget(message_label, lightbeam, "Choose LightBeam version", lightbeam_label))
 lightbeam_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, lightbeam_button, "LightBeam"))
 lightbeam_button.bind("<Leave>",lambda event: hide_tooltip(event, lightbeam_button))
 lightbeam_button.pack(side=tk.LEFT, padx=2, pady=2)
 
-configure_button_photo = ImageTk.PhotoImage(Image.open(".\\icon\\configfile_icon.jpg"))
+configure_button_photo = ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(configfile_icon))))
 configure_button = tk.Button(toolbar, image=configure_button_photo, text="ConfigureFile", command=lambda: choosefile_insertwidget(message_label, configure, "Choose configure file", configure_label))
 configure_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, configure_button, "ConfigureFile"))
 configure_button.bind("<Leave>",lambda event: hide_tooltip(event, configure_button))
 configure_button.pack(side=tk.LEFT, padx=2, pady=2)
 
-resultfolder_photo = ImageTk.PhotoImage(Image.open(".\\icon\\resultfolder_icon.jpg"))
+resultfolder_photo = ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(resultfolder_icon))))
 resultfolder_button = tk.Button(toolbar, image=resultfolder_photo, text="ResultFolder", command=lambda: choosefolder_insertwidget(message_label, resultfolder, "Choose result folder", resultfolder_label))
 resultfolder_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, resultfolder_button, "ResultFolder"))
 resultfolder_button.bind("<Leave>",lambda event: hide_tooltip(event, resultfolder_button))
 resultfolder_button.pack(side=tk.LEFT, padx=2, pady=2)
 
-imagefolder_photo = ImageTk.PhotoImage(Image.open(".\\icon\\imagefolder_icon.jpg"))
+imagefolder_photo = ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(imagefolder_icon))))
 imagefolder_button = tk.Button(toolbar, image=imagefolder_photo, text="ImageFolder", command=lambda: choosefolder_insertwidget(message_label, imagefolder, "Choose image folder", imagefolder_label))
 imagefolder_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, imagefolder_button, "ImageFolder"))
 imagefolder_button.bind("<Leave>",lambda event: hide_tooltip(event, imagefolder_button))
 imagefolder_button.pack(side=tk.LEFT, padx=2, pady=2)
 
-singleimage_photo = ImageTk.PhotoImage(Image.open(".\\icon\\singleimage_icon.jpg"))
+singleimage_photo = ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(singleimage_icon))))
 singleimage_button = tk.Button(toolbar, image=singleimage_photo, text="SingleImage", command=lambda: choosefile_singleimage(message_label, "Choose 1 image file", imagefolder_label))
 singleimage_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, singleimage_button, "SingleImage"))
 singleimage_button.bind("<Leave>",lambda event: hide_tooltip(event, singleimage_button))
 singleimage_button.pack(side=tk.LEFT, padx=2, pady=2)
 
-play_photo = ImageTk.PhotoImage(Image.open(".\\icon\\play_icon.jpg"))
+play_photo = ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(play_icon))))
 play_button = tk.Button(toolbar, image=play_photo, text="Play", command=lambda: execute_single_cmd(message_label, lightbeam_label.cget("text"), configure_label.cget("text").replace("/","\\"), resultfolder_label.cget("text").replace("/","\\"), imagefolder_label.cget("text").replace("/","\\"), hogfile_addCMD_tick, hogfile_inputbox.get(), log_addCMD_tick, log_inputbox.get(), loglevel_addCMD_tick, loglevel_combobox.get(),  heap_memory_addCMD_tick, heap_memory_combobox.get(), stack_memory_addCMD_tick, stack_memory_combobox.get(), iteration_addCMD_tick, iteration_combobox.get(), disable_shortcuts_addCMD_tick, threads_number_addCMD_tick, threads_number_combobox.get(), stop_after_addCMD_tick, stop_after_combobox.get(), progressive_slice_height_addCMD_tick, progressive_slice_height_combobox.get(), decode_timeout_addCMD_tick, decode_timeout_combobox.get(), progressive_instances_number_addCMD_tick, progressive_instances_number_combobox.get(), repeat_addCMD_tick, repeat_combobox.get(), verbose_addCMD_tick))
 play_button.bind("<Enter>",lambda event: show_tooltip(event, toolbar, play_button, "Execute CMD"))
 play_button.bind("<Leave>",lambda event: hide_tooltip(event, play_button))

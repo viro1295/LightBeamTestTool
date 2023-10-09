@@ -1,8 +1,13 @@
+import io
+import base64
 import subprocess
 import os
 import shutil
 import tkinter as tk
 from tkinter import ttk, filedialog
+from PIL import ImageTk, Image
+from base64img import *
+
 
 ################UtilityFunctions######################
 
@@ -107,7 +112,7 @@ def document_function(messagelabel, window):
     messagelabel.config(text="Show command syntax usage")
     documentwindow = tk.Toplevel(window)
     documentwindow.title("Usage")
-    documentwindow.iconbitmap(".\\icon\\document_icon.ico")
+    documentwindow.iconphoto(False, ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(document_icon)))))
     documentwindow.geometry("600x400")
     document_label = tk.Label(documentwindow, text='''
     lightbeam decode [OPTION...] Images folder
@@ -135,7 +140,7 @@ def about_function(messagelabel, window):
     messagelabel.config(text="Show test tool information")
     aboutwindow = tk.Toplevel(window)
     aboutwindow.title("About")
-    aboutwindow.iconbitmap(".\\icon\\about_icon.ico")
+    aboutwindow.iconphoto(False, ImageTk.PhotoImage(Image.open(io.BytesIO(base64.b64decode(about_icon)))))
     aboutwindow.geometry("300x30")
     about_label = tk.Label(aboutwindow, text="LightBeam test tool v.1.0.1")
     about_label.pack()
